@@ -11,5 +11,20 @@ use USPC\Feeds\ServiceAware;
  */
 class MerchantRepository extends ServiceAware
 {
-  
+
+  public function find($id)
+  {
+    // !!! stub
+  }
+
+  public function findByDomain($domain)
+  {
+    // !!! stub
+  }
+
+  public function findByName($name)
+  {
+    // !!! stub
+  }
+
 }

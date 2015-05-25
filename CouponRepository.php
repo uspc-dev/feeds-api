@@ -11,5 +11,15 @@ use USPC\Feeds\ServiceAware;
  */
 class CouponRepository extends ServiceAware
 {
-  
+
+  public function find($id)
+  {
+    // !!! stub
+  }
+
+  public function findByDomain($domain)
+  {
+    // !!! stub
+  }
+
 }
