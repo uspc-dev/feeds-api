@@ -22,27 +22,43 @@ class ServiceConnection
   const CONFIG_SECRET_KEY = 'secretKey';
 
   private $config;
+  private $configFile;
 
   /**
    * 
    */
-  public function __construct()
+  public function __construct($configFile = '')
   {
+    $this->setConfigFile($configFile);
     $this->loadConfiguration();
+  }
+  
+  /**
+   * Save config file locatoin. If empty, generate default location.
+   * 
+   * @param string $configFile
+   */
+  private function setConfigFile($configFile)
+  {
+    if (empty($configFile)) {
+      $configFile = __DIR__ . '/config.php';
+    }
+    
+    $this->configFile = $configFile;
   }
 
   /**
-   * 
+   * Load configuration from file and validate required fields.
    */
   private function loadConfiguration()
   {
     # load configuration
-    $configFile = __DIR__ . '/config.php';
-    $this->config = @include($configFile);
+    $this->config = @include($this->configFile);
     $this->validateConfig();
   }
 
   /**
+   * Check if required fields exist and valid.
    * 
    * @throws MissedConfigException
    * @throws ConfigApiHostException
@@ -77,6 +93,7 @@ class ServiceConnection
   }
   
   /**
+   * Fetch informatoin from remote service.
    * 
    * @param string $func
    * @return mixed
