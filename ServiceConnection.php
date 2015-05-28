@@ -75,5 +75,30 @@ class ServiceConnection
       throw new ConfigSecretKeyException();
     }
   }
+  
+  /**
+   * 
+   * @param string $func
+   * @return mixed
+   */
+  public function fetch($func)
+  {
+    $url = $this->buildUrl() . $func;
+    
+    // replace simple get request with post authentication
+    
+    return @file_get_contents($url);
+  }
+  
+  /**
+   * Build general URL for access feeds API
+   * 
+   * @return string
+   */
+  private function buildUrl()
+  {
+    return 'http://' . $this->config[self::CONFIG_API_HOST] 
+        . $this->config[self::CONFIG_API_URL];
+  }
 
 }
