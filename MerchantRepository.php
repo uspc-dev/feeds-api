@@ -14,6 +14,7 @@ class MerchantRepository extends ServiceAware
 
   const API_FIND_MERCHANT = '/merchants/';
   const API_SEARCH_BY_DOMAIN = '/merchants/search/byDomain';
+  const API_SEARCH_BY_NAME = '/merchants/search/byName';
 
   /**
    * Return information about merchant with given $id
@@ -28,15 +29,9 @@ class MerchantRepository extends ServiceAware
       return null;
     }
 
-    $xml = simplexml_load_string($data);
+    $merchants = $this->extractMerchants($data);
 
-    if (!$xml->status || $xml->merchants['total'] == 0) {
-      return null;
-    }
-
-    $merchant = $this->merchantInfo($xml->merchants->merchant);
-    
-    return $merchant;
+    return empty($merchants) ? null : current($merchants);
   }
 
   /**
@@ -47,39 +42,63 @@ class MerchantRepository extends ServiceAware
   public function findByDomain($domain)
   {
     $query = http_build_query(array(
-        'domain' => $domain
+        'domain' => $domain,
     ));
     $data = $this->service->fetch(self::API_SEARCH_BY_DOMAIN . '?' . $query);
-    
+    return $this->extractMerchants($data);
+  }
+
+  /**
+   * 
+   * @param string $name
+   * @return array
+   */
+  public function findByName($name)
+  {
+    $query = http_build_query(array(
+        'name' => $name,
+    ));
+    $data = $this->service->fetch(self::API_SEARCH_BY_NAME . '?' . $query);
+    return $this->extractMerchants($data);
+  }
+
+  /**
+   * 
+   * @param string $data
+   * @return array
+   */
+  private function extractMerchants($data)
+  {
     if (empty($data)) {
       return array();
     }
-    
+
     $xml = simplexml_load_string($data);
     if (!$xml->status || $xml->merchants['total'] == 0) {
       return array();
     }
-    
+
     $merchants = array();
     foreach ($xml->merchants->merchant as $merchant) {
       $merchants[] = $this->merchantInfo($merchant);
     }
-    
+
     return $merchants;
   }
 
-  public function findByName($name)
-  {
-    // !!! stub
-  }
-
+  /**
+   * 
+   * @param array $merchant
+   * @return array
+   */
   private function merchantInfo($merchant)
   {
     $merchant = (array) $merchant;
     $merchant['id'] = intval($merchant['id']);
     $merchant['coupons'] = intval($merchant['@attributes']['coupons']);
     unset($merchant['@attributes']);
-    
+
     return $merchant;
   }
+
 }
