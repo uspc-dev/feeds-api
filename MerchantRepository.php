@@ -24,12 +24,21 @@ class MerchantRepository extends ServiceAware
    */
   public function find($id)
   {
+    if (is_array($id)) {
+      $isMultipleResult = true;
+      $id = join(',', $id);
+    }
+
     $data = $this->service->fetch(self::API_FIND_MERCHANT . $id);
     if (empty($data)) {
       return null;
     }
 
     $merchants = $this->extractMerchants($data);
+
+    if (!empty($isMultipleResult)) {
+      return $merchants;
+    }
 
     return empty($merchants) ? null : current($merchants);
   }
