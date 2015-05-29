@@ -19,7 +19,7 @@ class MerchantRepository extends ServiceAware
   /**
    * Return information about merchant with given $id
    * 
-   * @param int $id
+   * @param int|array $id
    * @return null|array
    */
   public function find($id)
@@ -100,9 +100,12 @@ class MerchantRepository extends ServiceAware
    * @param array $merchant
    * @return array
    */
-  private function merchantInfo($merchant)
+  static public function merchantInfo($merchant)
   {
-    $merchant = (array) $merchant;
+    $merchant = array_map(function($item) {
+      return is_array($item) ? $item : (string) $item;
+    }, (array) $merchant);
+
     $merchant['id'] = intval($merchant['id']);
     $merchant['coupons'] = intval($merchant['@attributes']['coupons']);
     unset($merchant['@attributes']);
