@@ -12,7 +12,7 @@ use USPC\Feeds\ServiceAware;
 class MerchantRepository extends ServiceAware
 {
 
-  const API_FIND_MERCHANT = '/merchants/';
+  const API_FIND_MERCHANT = '/merchants/find/byId';
   const API_SEARCH_BY_DOMAIN = '/merchants/search/byDomain';
   const API_SEARCH_BY_NAME = '/merchants/search/byName';
 
@@ -29,7 +29,7 @@ class MerchantRepository extends ServiceAware
       $id = join(',', $id);
     }
 
-    $data = $this->service->fetch(self::API_FIND_MERCHANT . $id);
+    $data = $this->service->fetch(self::API_FIND_MERCHANT . '?merchantId=' . $id);
     if (empty($data)) {
       return null;
     }
