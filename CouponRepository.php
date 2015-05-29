@@ -32,7 +32,6 @@ class CouponRepository extends ServiceAware
       $id = join(',', $id);
     }
 
-    echo self::API_COUPONS_BY_MERCHANT . '?merchantId=' . $id, '<br>';
     $data = $this->service->fetch(self::API_COUPONS_BY_MERCHANT . '?merchantId=' . $id);
     if (empty($data)) {
       return null;
