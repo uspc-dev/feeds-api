@@ -1,9 +1,8 @@
 <?php
 
-use USPC\Feeds\ServiceConnection;
-use USPC\Feeds\ConfigNotFoundException as ConfigException;
+require_once(__DIR__ . '/../vendor/autoload.php');
 
-require_once(__DIR__ . '/../autoload.php');
+use USPC\Feeds\ServiceConnection;
 
 try {
   $service = new ServiceConnection();

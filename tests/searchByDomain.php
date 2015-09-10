@@ -1,9 +1,9 @@
 <?php
 
+require_once(__DIR__ . '/../vendor/autoload.php');
+
 use USPC\Feeds\ServiceConnection;
 use USPC\Feeds\MerchantRepository;
-
-require_once(__DIR__ . '/../autoload.php');
 
 if ($argc < 2) {
   echo "Usage: $argv[0] word", PHP_EOL;

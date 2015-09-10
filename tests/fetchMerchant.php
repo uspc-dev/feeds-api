@@ -1,9 +1,9 @@
 <?php
 
+require_once(__DIR__ . '/../vendor/autoload.php');
+
 use USPC\Feeds\ServiceConnection;
 use USPC\Feeds\MerchantRepository;
-
-require_once(__DIR__ . '/../autoload.php');
 
 try {
   $service = new ServiceConnection();
@@ -27,4 +27,6 @@ if ($merchant) {
   foreach ($merchant as $key => $value) {
     echo "   ", str_pad($key, $maxLength, ' ', STR_PAD_LEFT), ': ', $value, PHP_EOL;
   }
+} else {
+  echo "No merchant found.", PHP_EOL;
 }
