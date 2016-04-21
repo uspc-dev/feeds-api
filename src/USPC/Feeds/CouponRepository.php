@@ -23,27 +23,35 @@ class CouponRepository extends ServiceAware
    * Return information about merchant coupons with given merchant $id
    * 
    * @param int|array $id
-   * @return null|array
+   * @return array
    */
   public function getByMerchant($id)
   {
     if (is_array($id)) {
-      $isMultipleResult = true;
+      $is_multiple = true;
       $id = join(',', $id);
     }
 
     $data = $this->service->fetch(self::API_COUPONS_BY_MERCHANT . '?merchantId=' . $id);
     if (empty($data)) {
-      return null;
+      return [];
     }
 
-    $coupons = $this->extractCoupons($data);
+    # get all coupons
+    $all_coupons = $this->extractCoupons($data);
 
-    if (!empty($isMultipleResult)) {
-      return $coupons;
-    }
+    # group by merchant id
+    $coupons_by_merchant = array_reduce($all_coupons, function($acc, $coupon) {
+      $merchant_id = $coupon['merchant']['id'];
+      if (empty($acc[$merchant_id])) {
+        $acc[$merchant_id] = [];
+      }
+      $acc[$merchant_id][] = $coupon;
 
-    return empty($coupons) ? null : current($coupons);
+      return $acc;
+    }, []);
+
+    return !empty($is_multiple) ? $coupons_by_merchant : current($coupons_by_merchant);
   }
 
   /**
