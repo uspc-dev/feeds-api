@@ -1,5 +1,6 @@
 {
     "name": "uspc/feeds-api",
+    "description": "The package is used to get access for remote feeds",
     "authors": [
         {
             "name": "Mykola Martynov",
